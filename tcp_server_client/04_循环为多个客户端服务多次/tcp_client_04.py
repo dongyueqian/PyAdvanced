@@ -1,5 +1,8 @@
 # _*_ coding:utf-8 _*_
 import socket
+"""
+tcp客户端代码无需修改
+"""
 
 def main():
     """用来完成整体的控制"""
