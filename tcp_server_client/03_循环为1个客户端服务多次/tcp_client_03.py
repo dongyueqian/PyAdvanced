@@ -10,7 +10,7 @@ def main():
     # server_ip = input("请输入要连接的服务器IP地址：")
     # server_port = int(input("请输入要连接的服务器端口号："))
     # server_addr = (server_ip,server_port)
-    server_addr = (("192.168.0.101", 8888))
+    server_addr = (("127.0.0.1", 8888))
     tcp_server_socket.connect(server_addr)
     try:
         while True:
