@@ -1,14 +1,15 @@
 # _*_ coding:utf-8 _*_
 import socket
 import re
+import threading
 
 """
 运行脚本，在浏览器输入：http://127.0.0.1:8888/index.html 并回车
 将在浏览器看到相应的页面
 """
 
-def dealHttpRequest(new_socket, http_request_addr):
-    # 6、接收浏览器发送过来的数据
+def dealHttpRequest(new_socket):
+    # 7、接收浏览器发送过来的数据
     requests = new_socket.recv(1024).decode("utf-8")
     # print(">"*80)
     # print(requests)
@@ -62,7 +63,13 @@ def main():
             new_socket, http_request_addr = http_socket.accept()
 
             # 5、处理浏览器的请求
-            dealHttpRequest(new_socket, http_request_addr)
+            # dealHttpRequest(new_socket)
+            # 用多进程实现处理浏览器的请求
+            p = threading.Thread(target=dealHttpRequest, args=(new_socket, ))
+            p.start()
+
+            # 6、多线程，线程之间共享资源，不需要关闭套接字
+            # new_socket.close
 
     except KeyboardInterrupt:
         # 9、关闭监听套接字
