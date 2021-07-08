@@ -1,7 +1,7 @@
 # _*_ coding:utf-8 _*_
 import socket
 import re
-import multiprocessing
+import threading
 
 """
 运行脚本，在浏览器输入：http://127.0.0.1:8888/index.html 并回车
@@ -27,22 +27,34 @@ def dealHttpRequest(new_socket):
         if file_name == "/":
             file_name = "/index.html"
         print("*"*50,file_name)
+    try:
+        # 正常打开文件文件
+        f = open("./html" + file_name ,"rb")
 
+    except:  # 打开文件失败，即 找不到用户输入的文件名，执行以下内容，也要给浏览器返回数据
+        response = "HTTP/1.1 404 NOT FOUND\r\n"
+        response += "\r\n"
+        response += "------404 NOT FOUND------"
+        new_socket.send(response.encode("utf-8"))
 
-    # 7、给浏览器返回数据
-    response = "HTTP/1.1 200 OK\r\n"
-    response += "\r\n"
-    # response += "<h1>Hello World!</h1>"
+    else:
+        # 打开文件成功执行以下内容，html_content是要发送的body
+        html_content = f.read()
+        # print(html_content)
+        f.close()
 
-    f = open("./html" + file_name ,"rb")
-    html_content = f.read()
-    # print(html_content)
-    f.close()
+        # 准备发送给浏览器的header
+        response = "HTTP/1.1 200 OK\r\n"
+        response += "\r\n"
 
-    # 将response header发送给浏览器
-    new_socket.send(response.encode("utf-8"))
-    # 将response body发送给浏览器
-    new_socket.send(html_content)
+        # 准备发送给浏览器的body
+        # response += "<h1>Hello World!</h1>"
+
+        # 将response header发送给浏览器
+        new_socket.send(response.encode("utf-8"))
+
+        # 将response body发送给浏览器
+        new_socket.send(html_content)
     # 8、关闭套接字
     new_socket.close()
 
@@ -65,11 +77,11 @@ def main():
             # 5、处理浏览器的请求
             # dealHttpRequest(new_socket)
             # 用多进程实现处理浏览器的请求
-            p = multiprocessing.Process(target=dealHttpRequest, args=(new_socket, ))
+            p = threading.Thread(target=dealHttpRequest, args=(new_socket, ))
             p.start()
 
-            # 6、多进程，进程之间不共享资源，需要关闭套接字
-            new_socket.close()
+            # 6、多线程，线程之间共享资源，不需要关闭套接字
+            # new_socket.close
 
     except KeyboardInterrupt:
         # 9、关闭监听套接字
