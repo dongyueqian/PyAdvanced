@@ -1,18 +1,18 @@
 def register():
-    return "======register======"
+    return "======index======"
 
 def login():
     return "======login======"
 
 def logout():
-    return "======logout======"
+    return "======center======"
 
 def application(filename):
-    if filename == "/register.py":
-        return "register success"
+    if filename == "/index.py":
+        return "index success"
     elif filename == "/login.py":
         return "login success"
-    elif filename == "/logout.py":
-        return "logout success"
+    elif filename == "/center.py":
+        return "center success"
     else:
         return "error,not found"
