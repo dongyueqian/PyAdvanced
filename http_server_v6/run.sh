@@ -1,0 +1,1 @@
+python3 webServerWSGI.py 8888 miniFrameWSGI:application
