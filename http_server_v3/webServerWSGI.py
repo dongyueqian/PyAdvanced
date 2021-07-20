@@ -3,7 +3,8 @@
 import socket
 import re
 import multiprocessing
-from dynamic import miniFrameWSGI
+# from dynamic import miniFrameWSGI
+import sys
 
 """
 运行脚本，在浏览器输入：http://127.0.0.1:8888/index.html 并回车
@@ -11,15 +12,17 @@ from dynamic import miniFrameWSGI
 """
 class WSGIServer(object):
 
-    def __init__(self):
+    def __init__(self,port, app):
         # 1、创建套接字
         self.http_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # 设置当服务器先close 即服务器端4次挥手之后资源能够立即释放，这样就保证了，下次运行程序时 可以立即绑定8888端口
         self.http_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         # 2、绑定IP和port
-        self.http_socket.bind(("", 8888))
+        self.http_socket.bind(("", port))
         # 3、变为监听套接字
         self.http_socket.listen(128)
+
+        self.app = app
 
     def dealHttpRequest(self,new_socket):
         # 接收浏览器发送过来的数据
@@ -91,7 +94,7 @@ class WSGIServer(object):
             env["path"] = file_name
             # env["path"] = '.xxx.py'
             # 调用框架的函数,拿到body
-            body = miniFrameWSGI.application(env, self.start_response)
+            body = self.app(env, self.start_response)
 
             # 准备发送给浏览器的header
             response = "HTTP/1.1 %s\r\n" % self.status
@@ -128,8 +131,37 @@ class WSGIServer(object):
         print("关闭套接字")
 
 def main():
+
+    if len(sys.argv) == 3:
+        try:
+            port = int(sys.argv[1]) # 8888
+            frame_app_name = sys.argv[2] # miniFrameWSGI:application
+        except Exception as ret:
+            print("输入的端口有误")
+            return
+    else:
+        print("请按照以下方式运行")
+        print("python3 xxx.py 8888 miniFrameWSGI:application")
+        return
+
+    # 用正则匹配miniFrameWSGI:application
+    ret = re.match(r"(.+):(.*)",frame_app_name)
+    if ret:
+        frame_name = ret.group(1)   # miniFrameWSGI
+        app_name = ret.group(2)   # application
+    else:
+        print("请按照以下方式运行")
+        print("python3 xxx.py 8888 miniFrameWSGI:application")
+        return
+
+    sys.path.append("./dynamic") # 导入当前文件夹下的dynamic
+    # import frame_name : 找的是frame_name.py
+    frame = __import__(frame_name) # 返回值标记着导入的这个模块 miniFrameWSGI
+    app = getattr(frame,app_name) # 此时app就指向了dynamic/miniFrameWSGI模块中的application这个函数
+    # print(app) # <function application at 0x7fad3ba28f80>
+
     # 控制整体，创建一个web服务器对象，然后调用这个对象的run方法
-    wsgi_server = WSGIServer()
+    wsgi_server = WSGIServer(port, app)
     try:
         wsgi_server.run()
     except KeyboardInterrupt:

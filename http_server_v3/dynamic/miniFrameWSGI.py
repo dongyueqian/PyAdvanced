@@ -2,7 +2,7 @@ import time
 
 import re
 
-def index():
+def stock_info():
     with open("./templates/index.html", encoding="utf-8") as f:
         content = f.read()
 
@@ -15,7 +15,7 @@ def index():
 def login():
     return "======这里是登录页======"
 
-def center():
+def user_center():
 
     with open("./templates/center.html") as f:
         content = f.read()
@@ -31,13 +31,13 @@ def application(env, start_response):
     response_headers = [('Content-Type', 'text/html;charset=utf-8'),]
     start_response(status, response_headers)
     filename = env["path"]
-    if filename == '/index.py':
-        return index()
+    if filename == '/stock.py':
+        return stock_info()
 
     elif filename == '/login.py':
         return login()
 
-    elif filename == '/center.py':
-        return center()
+    elif filename == '/user.py':
+        return user_center()
     else:
         return '==你好啊!--->%s\n' % time.ctime()
