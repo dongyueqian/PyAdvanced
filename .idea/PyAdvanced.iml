@@ -12,6 +12,8 @@
         <option value="$MODULE_DIR$/http_server_1" />
         <option value="$MODULE_DIR$/http_server_v2" />
         <option value="$MODULE_DIR$/http_server_v3" />
+        <option value="$MODULE_DIR$/http_server_v4" />
+        <option value="$MODULE_DIR$/http_server_v5" />
       </list>
     </option>
   </component>
