@@ -13,7 +13,7 @@ def route(url_path):
         return wrapped_func
     return set_fun
 
-@route("/stock.html")
+@route(r"/stock.html")
 def stock_info():
     with open("./templates/index.html", encoding="utf-8") as f:
         content = f.read()
@@ -60,7 +60,7 @@ def stock_info():
 
     return content
 
-@route("/index.html")
+@route(r"/index.html")
 def index():
     with open("./templates/index.html", encoding="utf-8") as f:
         content = f.read()
@@ -71,7 +71,7 @@ def index():
 
     return content
 
-@route("/user.html")
+@route(r"/user.html")
 def user_center():
 
     with open("./templates/center.html") as f:
@@ -127,7 +127,11 @@ def user_center():
 #     "/index.py": index,
 #     "/user.py":user_center
 # }
-print(url_func_dict)
+
+@route(r"/add/\d+\.html")
+def add_focus():
+    return "add  ok ...."
+
 def application(env, start_response):
     status = '200 OK'
     response_headers = [('Content-Type', 'text/html;charset=utf-8'),]
@@ -145,7 +149,12 @@ def application(env, start_response):
 
     # 减少使用if else的方法
     try:
-        return url_func_dict[filename]()
+        # return url_func_dict[filename]()
+        for url, func in url_func_dict.items():
+            ret = re.match(url,filename)
+            print(ret)
+            if ret:
+                return func()
 
     except Exception as ret:
         return "产生了异常: %s " % str(ret)
