@@ -5,6 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>首页 - 个人选股系统 V5.87</title>
+    <script type="text/javascript" src="./js/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(":button").click(function(){
+                code =  $(this).attr("systemIdVaule");
+                $.get("/add/" + code + ".html",function(data,status){
+                        alert("数据：" + data + "\n状态：" + status);
+                 });
+            });
+        });
+    </script>
     <link href="./css/bootstrap.min.css" rel="stylesheet">
   </head>
   <body>

@@ -14,7 +14,7 @@ def route(url_path):
     return set_fun
 
 @route(r"/stock.html")
-def stock_info():
+def stock_info(ret):
     with open("./templates/index.html", encoding="utf-8") as f:
         content = f.read()
 
@@ -32,6 +32,9 @@ def stock_info():
 
     # 使用fetchall()方法获取所有数据
     my_stock_info  = cursor.fetchall()
+    # 关闭数据库连接
+    cursor.close()
+    conn.close()
 
     datas = """
         <tr>
@@ -54,14 +57,10 @@ def stock_info():
                          items[4], items[5],items[6],items[7], items[1])
     content = re.sub(r"\{%content%\}", html, content)
 
-    # 关闭数据库连接
-    cursor.close()
-    conn.close()
-
     return content
 
 @route(r"/index.html")
-def index():
+def index(ret):
     with open("./templates/index.html", encoding="utf-8") as f:
         content = f.read()
 
@@ -72,7 +71,7 @@ def index():
     return content
 
 @route(r"/user.html")
-def user_center():
+def user_center(ret):
 
     with open("./templates/center.html") as f:
         content = f.read()
@@ -91,6 +90,9 @@ def user_center():
 
     # 使用fetchall()方法获取所有数据
     my_stock_info = cursor.fetchall()
+    # 关闭数据库连接
+    cursor.close()
+    conn.close()
 
     datas = """
         <tr>
@@ -102,10 +104,10 @@ def user_center():
             <th>%s</th>
             <th>%s</th>
             <td>
-                <input type="button" value="=>修改" id="toAdd" name="toAdd" systemidvaule="%s">
+                <input type="button" value="=>修改" id="toAlter" name="toAlter" systemidvaule="%s">
             </td>  
             <td>
-                <input type="button" value="删除" id="toAdd" name="toAdd" systemidvaule="%s">
+                <input type="button" value="删除" id="toDel" name="toDel" systemidvaule="%s">
             </td>  
         </tr>
     """
@@ -114,10 +116,6 @@ def user_center():
         html += datas % (items[0], items[1], items[2], items[3],
                          items[4], items[5], items[6],items[6],items[0])
     content = re.sub(r"\{%content%\}", html, content)
-
-    # 关闭数据库连接
-    cursor.close()
-    conn.close()
 
     return content
 
@@ -128,15 +126,18 @@ def user_center():
 #     "/user.py":user_center
 # }
 
-@route(r"/add/\d+\.html")
-def add_focus():
-    return "add  ok ...."
+@route(r"/add/(\d+).html")
+def add_focus(ret):
+
+    stock_id = ret.group(1)
+
+    return "add  %s ok ...." % stock_id
 
 def application(env, start_response):
     status = '200 OK'
     response_headers = [('Content-Type', 'text/html;charset=utf-8'),]
     start_response(status, response_headers)
-    filename = env["path"] # /stock.py   /user.py
+    filename = env["path"] # /stock.html   /user.html
 
     # if filename == '/stock.py':
     #     return stock_info()
@@ -154,7 +155,9 @@ def application(env, start_response):
             ret = re.match(url,filename)
             print(ret)
             if ret:
-                return func()
+                return func(ret)
+        else:
+            return "您访问的页面不存在...."
 
     except Exception as ret:
         return "产生了异常: %s " % str(ret)

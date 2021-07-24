@@ -83,12 +83,12 @@ class WSGIServer(object):
                 # 将response body发送给浏览器
                 new_socket.send(html_content)
 
-        # 如果是以.py结尾，就认为是动态资源
+        # 如果是以.html结尾，就认为是动态资源
         else:
             # print(file_name,"是html结尾的文件")
             env = dict()
             env["path"] = file_name
-            # env["path"] = '.xxx.py'
+            # env["path"] = '.xxx.html'
             # 调用框架的函数,拿到body
             body = self.app(env, self.start_response)
 
