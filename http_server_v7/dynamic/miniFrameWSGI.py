@@ -1,5 +1,6 @@
 import re
 import pymysql
+import urllib.parse
 
 # 把path和对应的函数放在字典里
 url_func_dict = dict()
@@ -15,14 +16,7 @@ def route(url_path):
 
 @route(r"/index.html")
 def index(ret):
-    with open("./templates/index.html", encoding="utf-8") as f:
-        content = f.read()
-
-    my_stock_info = "这里是股票信息。。。。。。"
-
-    content = re.sub(r"\{%content%\}", my_stock_info, content)
-
-    return content
+    return stock_info(ret)
 
 @route(r"/stock.html")
 def stock_info(ret):
@@ -114,15 +108,15 @@ def user_center(ret):
     html = ""
     for items in my_stock_info:
         html += datas % (items[0], items[1], items[2], items[3],
-                         items[4], items[5], items[6],items[6],items[0])
+                         items[4], items[5], items[6],items[0],items[0])
     content = re.sub(r"\{%content%\}", html, content)
 
     return content
 
-@route(r"/add/(\d+).html")
+@route(r"/add/(\d+)\.html")
 def add_focus(ret):
     """ 添加关注 """
-    # 1、从分组中得到代码stock_id
+    # 1、从分组中得到代码stock_code
     stock_code = ret.group(1)
 
     # 2、判断stock_code是否存在
@@ -156,7 +150,7 @@ def add_focus(ret):
 
     return "add  %s ok ...." % stock_code
 
-@route(r"/del/(\d+).html")
+@route(r"/del/(\d+)\.html")
 def del_focus(ret):
     """ 取消关注 """
     # 1、从分组中得到代码stock_id
@@ -194,6 +188,78 @@ def del_focus(ret):
 
     return "del  %s ok ...." % stock_code
 
+@route(r"/update/(\d+)\.html")
+def update_page(ret):
+    """ 修改备注信息,显示修改备注的页面 """
+
+    # 1、从分组中得到代码stock_code
+    stock_code = ret.group(1)
+
+    # 2、打开资源
+    with open("./templates/update.html") as f:
+        content = f.read()
+
+    # 3、判断stock_code是否存在
+    # 打开数据库连接
+    conn = pymysql.connect(host="localhost", user="root", password="12345678", database="stock_db", charset="utf8")
+    # 使用cursor()方法创建一个游标对象cursor
+    cursor = conn.cursor()
+    # 使用execute()方法执行sql查询
+    sql = "select * from info where code=%s;"
+    cursor.execute(sql, (stock_code,))
+    # 如果所添加的stock_code不存在（在我的数据库中没有这个代码）
+    if not cursor.fetchone():
+        # 关闭数据库连接
+        cursor.close()
+        conn.close()
+        return "抱歉，您搜索的股票代码不存在哦～"
+
+    # 4、判断stock_code是否已经关注
+    sql = "select * from info i inner join focus f on i.id = f.info_id where i.code=%s"
+    cursor.execute(sql, (stock_code,))
+    if not cursor.fetchone():
+        # 关闭数据库连接
+        cursor.close()
+        conn.close()
+        return "%s不在您的关注列表中，无法操作" % stock_code
+
+    # 5、股票代码存在，且在关注列表中，则显示该股票的信息
+    sql = "select note_info from focus where info_id = (select id from info where code=%s)"
+    cursor.execute(sql, (stock_code,))
+    stock_mark_info = cursor.fetchone() # stock_mark_info是元组
+    # 关闭数据库连接
+    cursor.close()
+    conn.close()
+
+    content = re.sub(r"\{%note_info%\}", str(stock_mark_info[0]), content)
+    content = re.sub(r"\{%code%\}", stock_code, content)
+
+    return content
+
+
+@route(r"/update/(\d+)/(.*)\.html")
+def save_mark(ret):
+    """ 修改备注信息,显示修改备注的页面 """
+
+    # 1、从分组中得到代码stock_code和备注信息mark_info
+    stock_code = ret.group(1)
+    # 把页面的数据解码
+    mark_info = urllib.parse.unquote(ret.group(2))
+
+    # 2、打开数据库连接
+    conn = pymysql.connect(host="localhost", user="root", password="12345678", database="stock_db", charset="utf8")
+    # 使用cursor()方法创建一个游标对象cursor
+    cursor = conn.cursor()
+    sql = "update focus set note_info=%s where info_id = (select id from info where code=%s)"
+    # 解码后的数据提交到数据库
+    cursor.execute(sql, (mark_info, stock_code))
+    conn.commit()
+    # 关闭数据库连接
+    cursor.close()
+    conn.close()
+
+    return "修改成功"
+
 def application(env, start_response):
     status = '200 OK'
     response_headers = [('Content-Type', 'text/html;charset=utf-8'),]
@@ -214,12 +280,10 @@ def application(env, start_response):
         # return url_func_dict[filename]()
         for url, func in url_func_dict.items():
             ret = re.match(url,filename)
-            print(ret)
             if ret:
                 return func(ret)
         else:
-            return "您访问的页面不存在...."
+            return "您请求的URL(%s)没有对应的函数" % filename
 
     except Exception as ret:
         return "产生了异常: %s " % str(ret)
-
