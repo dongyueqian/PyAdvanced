@@ -13,6 +13,17 @@ def route(url_path):
         return wrapped_func
     return set_fun
 
+@route(r"/index.html")
+def index(ret):
+    with open("./templates/index.html", encoding="utf-8") as f:
+        content = f.read()
+
+    my_stock_info = "这里是股票信息。。。。。。"
+
+    content = re.sub(r"\{%content%\}", my_stock_info, content)
+
+    return content
+
 @route(r"/stock.html")
 def stock_info(ret):
     with open("./templates/index.html", encoding="utf-8") as f:
@@ -59,17 +70,6 @@ def stock_info(ret):
 
     return content
 
-@route(r"/index.html")
-def index(ret):
-    with open("./templates/index.html", encoding="utf-8") as f:
-        content = f.read()
-
-    my_stock_info = "这里是股票信息。。。。。。"
-
-    content = re.sub(r"\{%content%\}", my_stock_info, content)
-
-    return content
-
 @route(r"/user.html")
 def user_center(ret):
 
@@ -104,7 +104,7 @@ def user_center(ret):
             <th>%s</th>
             <th>%s</th>
             <td>
-                <input type="button" value="=>修改" id="toAlter" name="toAlter" systemidvaule="%s">
+                <a type="button" class="btn btn-default btn-xs" href="/update/%s.html"> <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 修改 </a>
             </td>  
             <td>
                 <input type="button" value="删除" id="toDel" name="toDel" systemidvaule="%s">
@@ -119,16 +119,9 @@ def user_center(ret):
 
     return content
 
-# 把path和对应的函数放在字典里
-# url_func_dict = {
-#     "/stock.py": stock_info,
-#     "/index.py": index,
-#     "/user.py":user_center
-# }
-
 @route(r"/add/(\d+).html")
 def add_focus(ret):
-
+    """ 添加关注 """
     # 1、从分组中得到代码stock_id
     stock_code = ret.group(1)
 
@@ -162,6 +155,44 @@ def add_focus(ret):
     conn.commit() # 提交事物
 
     return "add  %s ok ...." % stock_code
+
+@route(r"/del/(\d+).html")
+def del_focus(ret):
+    """ 取消关注 """
+    # 1、从分组中得到代码stock_id
+    stock_code = ret.group(1)
+
+    # 2、判断stock_code是否存在
+    # 打开数据库连接
+    conn = pymysql.connect(host="localhost", user="root", password="12345678", database="stock_db", charset="utf8")
+    # 使用cursor()方法创建一个游标对象cursor
+    cursor = conn.cursor()
+    # 使用execute()方法执行sql查询
+    sql = "select * from info where code=%s;"
+    cursor.execute(sql, (stock_code,))
+    # 如果所添加的stock_code不存在（在我的数据库中没有这个代码）
+    if not cursor.fetchone():
+        # 关闭数据库连接
+        cursor.close()
+        conn.close()
+        return "抱歉，您搜索的股票代码不存在哦～"
+
+    # 3、判断stock_code是否已经关注
+    sql = "select * from info i inner join focus f on i.id = f.info_id where i.code=%s"
+    cursor.execute(sql, (stock_code,))
+    # 如果没有关注
+    if not cursor.fetchone():
+        # 关闭数据库连接
+        cursor.close()
+        conn.close()
+        return "您未关注%s" % stock_code
+
+    # 4、股票代码存在，且已关注，则从关注列表中删除次代码
+    sql = "delete from focus where info_id=(select id from info where code=%s)"
+    cursor.execute(sql, (stock_code,))
+    conn.commit() # 提交事物
+
+    return "del  %s ok ...." % stock_code
 
 def application(env, start_response):
     status = '200 OK'
