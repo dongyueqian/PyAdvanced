@@ -129,9 +129,39 @@ def user_center(ret):
 @route(r"/add/(\d+).html")
 def add_focus(ret):
 
-    stock_id = ret.group(1)
+    # 1、从分组中得到代码stock_id
+    stock_code = ret.group(1)
 
-    return "add  %s ok ...." % stock_id
+    # 2、判断stock_code是否存在
+    # 打开数据库连接
+    conn = pymysql.connect(host="localhost", user="root", password="12345678", database="stock_db", charset="utf8")
+    # 使用cursor()方法创建一个游标对象cursor
+    cursor = conn.cursor()
+    # 使用execute()方法执行sql查询
+    sql = "select * from info where code=%s;"
+    cursor.execute(sql, (stock_code,))
+    # 如果所添加的stock_code不存在（在我的数据库中没有这个代码）
+    if not cursor.fetchone():
+        # 关闭数据库连接
+        cursor.close()
+        conn.close()
+        return "抱歉，您搜索的股票代码不存在哦～"
+
+    # 3、判断stock_code是否已经关注
+    sql = "select * from info i inner join focus f on i.id = f.info_id where i.code=%s"
+    cursor.execute(sql, (stock_code,))
+    if cursor.fetchone():
+        # 关闭数据库连接
+        cursor.close()
+        conn.close()
+        return "%s已在您的关注列表中，请勿重复关注" % stock_code
+
+    # 4、股票代码存在，且未关注，则该股票添加进关注列表
+    sql = "insert  into focus (info_id) select id from info where code=%s"
+    cursor.execute(sql, (stock_code,))
+    conn.commit() # 提交事物
+
+    return "add  %s ok ...." % stock_code
 
 def application(env, start_response):
     status = '200 OK'
