@@ -13,9 +13,10 @@
             $("#update").click(function(){
                 var item = $("#note_info").val();
                 // alert("/update/{%code%}/" + item + ".html");
-                $.get("/update/{%code%}/" + item + ".html", function(data, status){
-                    alert("数据: " + data + "\n状态: " + status);
-                    self.location='/user.html';
+                    $.post("/update/{%code%}/" + item + ".html", {data: item},
+                    function(data, status){
+                        alert("数据: " + data + "\n状态: " + status);
+                        self.location='/user.html';
                 });
             });
         });

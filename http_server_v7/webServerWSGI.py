@@ -37,10 +37,11 @@ class WSGIServer(object):
         # print(request_lines)
 
         # 提取请求内容：'GET /ziyuan.html HTTP/1.1'
-        ret = re.match(r"[^/]+(/[^ ]*)",request_lines[0])
+        ret = re.match(r"([^/]+)(/[^ ]*)",request_lines[0])
         file_name = ''
         if ret:
-            file_name = ret.group(1)
+            method = ret.group(1)
+            file_name = ret.group(2)
             if file_name == "/":
                 file_name = "/index.html"
             # print("*"*50,file_name)
@@ -87,6 +88,7 @@ class WSGIServer(object):
         else:
             # print(file_name,"是html结尾的文件")
             env = dict()
+            env["method"] = method
             env["path"] = file_name
             # env["path"] = '.xxx.html'
             # 调用框架的函数,拿到body

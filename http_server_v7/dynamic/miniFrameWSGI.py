@@ -265,6 +265,7 @@ def application(env, start_response):
     response_headers = [('Content-Type', 'text/html;charset=utf-8'),]
     start_response(status, response_headers)
     filename = env["path"] # /stock.html   /user.html
+    method = env["method"] # post get
 
     # if filename == '/stock.py':
     #     return stock_info()
@@ -275,12 +276,12 @@ def application(env, start_response):
     # else:
     #     return '==你好啊!--->%s\n' % time.ctime()
 
-    # 减少使用if else的方法
     try:
         # return url_func_dict[filename]()
         for url, func in url_func_dict.items():
             ret = re.match(url,filename)
             if ret:
+                print("这个是个%s方法" % method)
                 return func(ret)
         else:
             return "您请求的URL(%s)没有对应的函数" % filename
