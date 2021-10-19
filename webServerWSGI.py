@@ -152,7 +152,7 @@ def main():
         print("python3 xxx.py 8888 miniFrameWSGI:application")
         return
 
-    with open("./web_server.conf") as f:
+    with open("web_server.conf") as f:
         config_info =  eval(f.read())
         # 此时config_info 是字典
         # {
