@@ -34,3 +34,11 @@
 [2021-10-19 18:12:01,462] [DEBUG] [application]  请求路径: /del/001343.html 
 [2021-10-19 18:12:01,473] [WARNING] [del_focus]  您未关注001343 
 [2021-10-19 18:12:18,569] [DEBUG] [application]  请求路径: /user.html 
+[2021-10-19 18:41:03,783] [DEBUG] [application]  请求路径: /index.html 
+[2021-10-19 18:41:06,821] [DEBUG] [application]  请求路径: /user.html 
+[2021-10-19 18:41:07,593] [DEBUG] [application]  请求路径: /stock.html 
+[2021-10-19 18:41:08,931] [DEBUG] [application]  请求路径: /stock.html 
+[2021-10-19 18:41:09,427] [DEBUG] [application]  请求路径: /user.html 
+[2021-10-19 18:41:50,208] [DEBUG] [application]  请求路径: /stock.html 
+[2021-10-19 18:42:24,390] [DEBUG] [application]  请求路径: /user.html 
+[2021-10-19 18:42:37,310] [DEBUG] [application]  请求路径: /stock.html 
