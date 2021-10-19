@@ -131,6 +131,7 @@ class WSGIServer(object):
 def main():
 
     if len(sys.argv) == 3:
+        print(sys.argv)
         try:
             port = int(sys.argv[1]) # 8888
             frame_app_name = sys.argv[2] # miniFrameWSGI:application
@@ -152,7 +153,7 @@ def main():
         print("python3 xxx.py 8888 miniFrameWSGI:application")
         return
 
-    with open("web_server.conf") as f:
+    with open("config/web_server.conf") as f:
         config_info =  eval(f.read())
         # 此时config_info 是字典
         # {
@@ -162,8 +163,9 @@ def main():
         # }
 
     sys.path.append(config_info["dynamic_path"]) # 导入当前文件夹下的dynamic
+    # print(config_info)
     # import frame_name : 找的是frame_name.py
-    frame = __import__(frame_name) # 返回值标记着导入的这个模块 miniFrameWSGI
+    frame = __import__(frame_name) # 返回值标 记着导入的这个模块 miniFrameWSGI
     app = getattr(frame,app_name) # 此时app就指向了dynamic/miniFrameWSGI模块中的application这个函数
     # print(app) # <function application at 0x7fad3ba28f80>
 

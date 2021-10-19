@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>首页 - 个人选股系统 V5.87</title>
+    <title>首页 - 基金查询系统 V5.87</title>
     <script type="text/javascript" src="./js/jquery-3.5.1.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
@@ -18,7 +18,6 @@
     </script>
     <link href="./css/bootstrap.min.css" rel="stylesheet">
   </head>
-  <body>
 <div class="navbar navbar-inverse navbar-static-top ">
     <div class="container">
     <div class="navbar-header">
@@ -27,11 +26,11 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
          </button>
-         <a href="#" class="navbar-brand">选股系统</a>
+         <a href="#" class="navbar-brand">基金查询系统</a>
     </div>
     <div class="collapse navbar-collapse" id="mymenu">
         <ul class="nav navbar-nav">
-            <li class="active"><a href="/stock.html">股票信息</a></li>
+            <li class="active"><a href="/stock.html">基金信息</a></li>
             <li><a href="/user.html">个人中心</a></li>
         </ul>
     </div>
@@ -44,13 +43,13 @@
       <table class="table table-hover">
         <tr>
             <th>序号</th>
-            <th>股票代码</th>
-            <th>股票简称</th>
+            <th>基金代码</th>
+            <th>基金名称</th>
+            <th>基金类型</th>
+            <th>单位净值</th>
+            <th>累计净值</th>
             <th>涨跌幅</th>
-            <th>换手率</th>
-            <th>最新价(元)</th>
-            <th>前期高点</th>
-            <th>前期高点日期</th>
+            <th>记录时间</th>
             <th>添加自选</th>
         </tr>
         {%content%}
