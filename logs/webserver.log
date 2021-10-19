@@ -13,3 +13,24 @@
 [2021-10-19 18:02:42,865] [WARNING] [application]  您请求的URL(/uer.html)没有对应的函数 
 [2021-10-19 18:03:11,786] [DEBUG] [application]  请求路径: /uer.html 
 [2021-10-19 18:03:11,787] [ERROR] [application]  您请求的URL(/uer.html)没有对应的函数 
+[2021-10-19 18:06:30,933] [DEBUG] [application]  请求路径: /uer.html 
+[2021-10-19 18:06:30,935] [WARNING] [application]  您请求的URL(/uer.html)没有对应的函数 
+[2021-10-19 18:06:36,073] [DEBUG] [application]  请求路径: /stock.html 
+[2021-10-19 18:06:36,825] [DEBUG] [application]  请求路径: /user.html 
+[2021-10-19 18:06:56,466] [DEBUG] [application]  请求路径: /update/001343.html 
+[2021-10-19 18:06:58,954] [DEBUG] [application]  请求路径: /update/00143.html 
+[2021-10-19 18:10:48,507] [DEBUG] [application]  请求路径: /update/00143.html 
+[2021-10-19 18:10:48,518] [WARNING] [update_page]  搜索的基金代码不存在 
+[2021-10-19 18:10:55,370] [DEBUG] [application]  请求路径: /index.html 
+[2021-10-19 18:11:00,757] [DEBUG] [application]  请求路径: /indx.html 
+[2021-10-19 18:11:00,758] [WARNING] [application]  您请求的URL(/indx.html)没有对应的函数 
+[2021-10-19 18:11:07,387] [DEBUG] [application]  请求路径: /user.html 
+[2021-10-19 18:11:27,658] [DEBUG] [application]  请求路径: /del/001343.html 
+[2021-10-19 18:11:27,666] [DEBUG] [application]  请求路径: /user.html 
+[2021-10-19 18:11:40,873] [DEBUG] [application]  请求路径: /del/00143.html 
+[2021-10-19 18:11:40,884] [WARNING] [del_focus]  搜索的基金代码不存在 
+[2021-10-19 18:11:54,186] [DEBUG] [application]  请求路径: /del//001343.html 
+[2021-10-19 18:11:54,188] [WARNING] [application]  您请求的URL(/del//001343.html)没有对应的函数 
+[2021-10-19 18:12:01,462] [DEBUG] [application]  请求路径: /del/001343.html 
+[2021-10-19 18:12:01,473] [WARNING] [del_focus]  您未关注001343 
+[2021-10-19 18:12:18,569] [DEBUG] [application]  请求路径: /user.html 

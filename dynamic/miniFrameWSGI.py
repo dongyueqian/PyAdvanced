@@ -133,6 +133,7 @@ def add_focus(ret):
         # 关闭数据库连接
         cursor.close()
         conn.close()
+        logger.warning("搜索的基金代码不存在")
         return "抱歉，您搜索的基金代码不存在哦～"
 
     # 3、判断stock_code是否已经关注
@@ -142,6 +143,7 @@ def add_focus(ret):
         # 关闭数据库连接
         cursor.close()
         conn.close()
+        logger.warning("%s已在您的关注列表中，请勿重复关注" % stock_code)
         return "%s已在您的关注列表中，请勿重复关注" % stock_code
 
     # 4、基金代码存在，且未关注，则该基金添加进关注列表
@@ -170,6 +172,7 @@ def del_focus(ret):
         # 关闭数据库连接
         cursor.close()
         conn.close()
+        logger.warning("搜索的基金代码不存在")
         return "抱歉，您搜索的基金代码不存在哦～"
 
     # 3、判断stock_code是否已经关注
@@ -180,6 +183,7 @@ def del_focus(ret):
         # 关闭数据库连接
         cursor.close()
         conn.close()
+        logger.warning("您未关注%s" % stock_code)
         return "您未关注%s" % stock_code
 
     # 4、基金代码存在，且已关注，则从关注列表中删除次代码
@@ -213,6 +217,7 @@ def update_page(ret):
         # 关闭数据库连接
         cursor.close()
         conn.close()
+        logger.warning("搜索的基金代码不存在")
         return "抱歉，您搜索的基金代码不存在哦～"
 
     # 4、判断stock_code是否已经关注
@@ -222,6 +227,7 @@ def update_page(ret):
         # 关闭数据库连接
         cursor.close()
         conn.close()
+        logger.warning("%s不在您的关注列表中，无法操作" % stock_code)
         return "%s不在您的关注列表中，无法操作" % stock_code
 
     # 5、基金代码存在，且在关注列表中，则显示该基金的信息
