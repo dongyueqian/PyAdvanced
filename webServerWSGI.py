@@ -131,7 +131,7 @@ class WSGIServer(object):
 def main():
 
     if len(sys.argv) == 3:
-        print(sys.argv)
+        # print(sys.argv)
         try:
             port = int(sys.argv[1]) # 8888
             frame_app_name = sys.argv[2] # miniFrameWSGI:application

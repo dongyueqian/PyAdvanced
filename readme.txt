@@ -9,7 +9,7 @@
     在浏览器输入：http://127.0.0.1:8888/index.html，进行访问
 
 3、项目说明
-    sql : 本项目的数据库，使用的库名称为stock_db， 需要建2张表，先执行fund_info.sql， 再执行fund_focus.sql
+    sql : 本项目的数据库，使用的库名称为stock_db， 需要建2张表，使用source命令先执行fund_info.sql， 再执行fund_focus.sql
     get_funds/get_funds_code.py : 爬取基金信息，处理后将基金代码写入./基金代码爬取/fundcode.csv
     get_funds/funds_insert_mysql.py : 根据基金代码查询基金其他信息，处理数据后插入mysql
 

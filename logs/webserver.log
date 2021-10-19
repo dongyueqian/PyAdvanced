@@ -1,6 +1,15 @@
-[2021-10-19 16:36:59,925] [DEBUG] [application] 请求路径: /stock.html 
-[2021-10-19 16:37:07,949] [DEBUG] [application] 请求路径: /user.html 
-[2021-10-19 16:37:08,708] [DEBUG] [application] 请求路径: /stock.html 
-[2021-10-19 16:37:41,484] [DEBUG] [application] 请求路径: /user.html 
-[2021-10-19 16:37:53,123] [DEBUG] [application] 请求路径: /stock.html 
-[2021-10-19 16:37:53,933] [DEBUG] [application] 请求路径: /user.html 
+[2021-10-19 17:58:03,116] [DEBUG] [miniFrameWSGI.py-line:287] [application]  请求路径: /stock.html 
+[2021-10-19 17:58:58,542] [DEBUG] [application]  请求路径: /user.html 
+[2021-10-19 17:58:59,191] [DEBUG] [application]  请求路径: /stock.html 
+[2021-10-19 18:00:43,674] [DEBUG] [application]  请求路径: /stock.html 
+[2021-10-19 18:00:44,345] [DEBUG] [application]  请求路径: /user.html 
+[2021-10-19 18:01:01,063] [DEBUG] [application]  请求路径: /usr.html 
+[2021-10-19 18:01:27,718] [DEBUG] [application]  请求路径: /usr.html 
+[2021-10-19 18:02:15,779] [DEBUG] [application]  请求路径: /stock.html 
+[2021-10-19 18:02:18,048] [DEBUG] [application]  请求路径: /stoc.html 
+[2021-10-19 18:02:18,049] [WARNING] [application]  您请求的URL(%s)没有对应的函数 
+[2021-10-19 18:02:39,581] [DEBUG] [application]  请求路径: /user.html 
+[2021-10-19 18:02:42,864] [DEBUG] [application]  请求路径: /uer.html 
+[2021-10-19 18:02:42,865] [WARNING] [application]  您请求的URL(/uer.html)没有对应的函数 
+[2021-10-19 18:03:11,786] [DEBUG] [application]  请求路径: /uer.html 
+[2021-10-19 18:03:11,787] [ERROR] [application]  您请求的URL(/uer.html)没有对应的函数 

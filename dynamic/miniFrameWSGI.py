@@ -287,7 +287,10 @@ def application(env, start_response):
                 logger.debug(f"请求路径: {filename}")
                 return func(ret)
         else:
+            logger.debug(f"请求路径: {filename}")
+            logger.warning("您请求的URL(%s)没有对应的函数" % filename)
             return "您请求的URL(%s)没有对应的函数" % filename
 
     except Exception as ret:
+        logger.error(f"产生了异常: {str(ret)}")
         return "产生了异常: %s " % str(ret)

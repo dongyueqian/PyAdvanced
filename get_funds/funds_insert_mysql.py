@@ -1,36 +1,7 @@
 import pymysql
-import requests
+from get_funds_code import get_one_page
 import re
 import json
-
-def get_one_page(fundcode, pageIndex=1):
-    '''
-    获取基金净值某一页的html
-    :param fundcode: str格式，基金代码
-    :param pageIndex: int格式，页码数
-    :return: str格式，获取网页内容
-    '''
-    url = 'http://api.fund.eastmoney.com/f10/lsjz'
-    cookie = 'EMFUND1=null; EMFUND2=null; EMFUND3=null; EMFUND4=null; EMFUND5=null; EMFUND6=null; EMFUND7=null; EMFUND8=null; EMFUND0=null; EMFUND9=01-24 17:11:50@#$%u957F%u4FE1%u5229%u5E7F%u6DF7%u5408A@%23%24519961; st_pvi=27838598767214; st_si=11887649835514'
-    headers = {
-        'Cookie': cookie,
-        'Host': 'api.fund.eastmoney.com',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
-        'Referer': 'http://fundf10.eastmoney.com/jjjz_%s.html' % fundcode,
-    }
-    params = {
-        'callback': 'jQuery18307633215694564663_1548321266367',
-        'fundCode': fundcode,
-        'pageIndex': pageIndex,
-        'pageSize': 1,
-    }
-    try:
-        r = requests.get(url=url, headers=headers, params=params)
-        if r.status_code == 200:
-            return r.text
-        return None
-    except Exception:
-        return None
 
 def main():
     path = './基金代码爬取/fundcode.csv'
