@@ -5,6 +5,7 @@ import re
 import multiprocessing
 # from dynamic import miniFrameWSGI
 import sys
+from logs.logger import logger
 
 """
 运行脚本，在浏览器输入：http://127.0.0.1:8888/index.html 并回车
@@ -115,7 +116,8 @@ class WSGIServer(object):
         while True:
             # 等待浏览器的连接
             new_socket, http_request_addr = self.http_socket.accept()
-
+            # print("%s已连接......" % (http_request_addr,))
+            logger.debug(f"IP地址: {http_request_addr}")
             # 处理浏览器的请求
             # self.dealHttpRequest(new_socket)
             # 用多进程实现处理浏览器的请求
